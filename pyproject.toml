@@ -1,0 +1,10 @@
+[project]
+name = "qg-polaris-semantic-examples"
+version = "0.1.0"
+description = "Examples for QueryGraph AI Navigator semantics in Apache Polaris"
+requires-python = ">=3.10"
+dependencies = []
+
+[tool.setuptools.packages.find]
+where = ["src"]
+

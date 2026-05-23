@@ -1,0 +1,56 @@
+semantic_models:
+  - name: revenue_semantics
+    description: Governed revenue semantics for orders, customers, and AI-safe agent discovery.
+    model: orders
+    entities:
+      - name: order
+        type: primary
+        expr: order_id
+      - name: customer
+        type: foreign
+        expr: customer_id
+    dimensions:
+      - name: order_date
+        type: time
+        expr: orders.order_date
+        description: Date when the order was accepted.
+      - name: customer_region
+        type: categorical
+        expr: customers.region
+        description: Commercial region assigned to the customer.
+      - name: product_category
+        type: categorical
+        expr: products.category
+        description: Product category used for revenue reporting.
+    measures:
+      - name: revenue
+        expr: orders.order_total
+        agg: sum
+        description: Gross order revenue before refunds.
+      - name: orders
+        expr: orders.order_id
+        agg: count_distinct
+        description: Number of distinct orders.
+    metrics:
+      - name: total_revenue
+        type: simple
+        description: Total gross order revenue.
+        type_params:
+          measure:
+            name: revenue
+      - name: order_count
+        type: simple
+        description: Count of distinct orders.
+        type_params:
+          measure:
+            name: orders
+    joins:
+      - name: customers
+        relationship: many_to_one
+        left_on: orders.customer_id
+        right_on: customers.id
+      - name: products
+        relationship: many_to_one
+        left_on: orders.product_id
+        right_on: products.id
+
